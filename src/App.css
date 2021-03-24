@@ -1,0 +1,24 @@
+.App {
+    padding: 30px;
+    display: flex;
+}
+
+.App > div {
+    margin-right: 50px;
+}
+
+
+.active-filter {
+    background-color: darkslategrey;
+    color: white;
+}
+
+
+.error {
+    border: red 1px solid;
+    outline: transparent;
+}
+
+.error-message {
+    color: red;
+}
