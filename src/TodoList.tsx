@@ -3,6 +3,7 @@ import {FilterValuesType, TaskType} from "./App";
 import './App.css'
 import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
+import {Button} from "@material-ui/core";
 
 
 type TodoListPropsType = {
@@ -63,28 +64,41 @@ function Todolist(props: TodoListPropsType) {
         <div>
             <h3>
             <EditableSpan title={props.title} changeTitle={changeTodoListTitle}/>
-                <button onClick={removeTodolist}>x</button>
+                <Button
+                    size={"small"}
+                    color={"primary"}
+                    variant={props.todoListFilter === "all" ? "outlined" :"contained"}
+                    onClick={removeTodolist}>x</Button>
             </h3>
             <AddItemForm addItem={addTask}/>
             <ul>
                 {tasks}
             </ul>
             <div>
-                <button
-                    className={allBtnClass}
+                <Button
+                    size={"small"}
+                    color={"primary"}
+                    variant={props.todoListFilter === "all" ? "outlined" :"contained"}
+                    //className={allBtnClass}
                     onClick={setAllFilterValue}
                 >All
-                </button>
-                <button
-                    className={activeBtnClass}
+                </Button>
+                <Button
+                    size={"small"}
+                    color={"primary"}
+                    variant={props.todoListFilter === "all" ? "outlined" :"contained"}
+                    //className={activeBtnClass}
                     onClick={setActiveFilterValue}
                 >Active
-                </button>
-                <button
-                    className={completedBtnClass}
+                </Button>
+                <Button
+                    size={"small"}
+                    color={"primary"}
+                    variant={props.todoListFilter === "all" ? "outlined" :"contained"}
+                    //className={completedBtnClass}
                     onClick={setCompletedFilterValue}
                 >Completed
-                </button>
+                </Button>
             </div>
         </div>
     )

@@ -3,6 +3,8 @@ import './App.css';
 import Todolist from "./TodoList";
 import {v1} from "uuid";
 import AddItemForm from "./AddItemForm";
+import {AppBar, Toolbar, Typography, Button, IconButton, Container, Grid, Paper,} from '@material-ui/core';
+import {Menu} from '@material-ui/icons'
 
 
 export type TaskType = {
@@ -23,6 +25,7 @@ export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
+const gridStyles = {padding: "20px 0px"}
 
 function App() {
 
@@ -129,11 +132,11 @@ function App() {
             id: newTodoListID, title, filter: "all"
         }
         setTodoLists([...todoLists, newTodoList])
-        setTasks({...tasks, [newTodoListID]:[]})
+        setTasks({...tasks, [newTodoListID]: []})
     }
 
     function changeTaskTitle(taskID: string, newTitle: string, todoListID: string) {
-        const updatedTasks = tasks[todoListID].map(t => t.id === taskID ? {...t, title:newTitle} : t)
+        const updatedTasks = tasks[todoListID].map(t => t.id === taskID ? {...t, title: newTitle} : t)
         //const updatedTasks = tasks.map(t=>{
         //  if(t.id === taskID){
         //       return {...t, isDone: !t.isDone}
@@ -145,23 +148,17 @@ function App() {
             [todoListID]: updatedTasks
         })
     }
-    function changeTodoListTitle(title: string, todoListID: string){
-        const updatedTodoList = todoLists.map(tl => tl.id === todoListID ? {...tl,title}:tl)
+
+    function changeTodoListTitle(title: string, todoListID: string) {
+        const updatedTodoList = todoLists.map(tl => tl.id === todoListID ? {...tl, title} : tl)
         setTodoLists(updatedTodoList)
     }
 
-
-
-
-
-    return (
-        <div className="App">
-            <AddItemForm addItem={addTodoList}/>
-            {
-                todoLists.map(tl => {
-                    return (
+    const todoListsComponents = todoLists.map(tl => {
+            return (
+                <Grid item key={tl.id}>
+                    <Paper elevation={6} style={{padding: "20px"}}>
                         <Todolist
-                            key={tl.id}
                             id={tl.id}
                             title={tl.title}
                             tasks={getTaskForTodolist(tl)}
@@ -174,18 +171,35 @@ function App() {
                             changeTaskTitle={changeTaskTitle}
                             changeTodoListTitle={changeTodoListTitle}
                         />
-                    )
-                })
-            }
-            {/*<Todolist
-                title={'What to learn'}
-                tasks={getTaskForTodolist()}
-                changeTodoListFilter={changeTodoListFilter}
-                removeTask={removeTask}
-                addTask={addTask}
-                todoListFilter={todoListFilter}
-                changeTaskStatus={changeTaskStatus}
-            />*/}
+                    </Paper>
+                </Grid>
+            )
+        }
+    )
+
+
+    return (
+        <div className="App">
+
+            <AppBar position="static">
+                <Toolbar style={{justifyContent: "space-between"}}>
+                    <IconButton edge="start" color="inherit" aria-label="menu">
+                        <Menu/>
+                    </IconButton>
+                    <Typography variant="h6">
+                        TodoLists
+                    </Typography>
+                    <Button variant={"outlined"} color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
+            <Container fixed>
+                <Grid container={true} style={gridStyles}>
+                    <AddItemForm addItem={addTodoList}/>
+                </Grid>
+                <Grid container={true} spacing={5}>
+                    {todoListsComponents}
+                </Grid>
+            </Container>
         </div>
     )
 }
