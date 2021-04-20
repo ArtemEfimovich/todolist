@@ -3,7 +3,8 @@ import {FilterValuesType, TaskType} from "./App";
 import './App.css'
 import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
-import {Button} from "@material-ui/core";
+import {Button, Checkbox, IconButton} from "@material-ui/core";
+import {Delete} from "@material-ui/icons";
 
 
 type TodoListPropsType = {
@@ -31,14 +32,22 @@ function Todolist(props: TodoListPropsType) {
         }
         return (
             <li key={t.id} className={t.isDone ? "not-active" : ""}>
-                <input
+               <Checkbox
+                   color={"primary"}
+                   checked={t.isDone}
+                   onChange={changeStatus}
+               />
+                {/*<input
                     type="checkbox"
                     checked={t.isDone}
                     onChange={changeStatus}
-                />
+                />*/}
                 <EditableSpan title={t.title} changeTitle={changeTaskTitle}/>
                 {/*<span>{t.title}</span>*/}
-                <button onClick={removeTask}>x</button>
+                <IconButton onClick={removeTask}>
+                    <Delete/>
+                </IconButton>
+               {/* <button onClick={removeTask}>x</button>*/}
             </li>
         )
     })
@@ -64,11 +73,14 @@ function Todolist(props: TodoListPropsType) {
         <div>
             <h3>
             <EditableSpan title={props.title} changeTitle={changeTodoListTitle}/>
-                <Button
+                <IconButton onClick={removeTodolist}>
+                    <Delete/>
+                </IconButton>
+            {/*<Button
                     size={"small"}
                     color={"primary"}
                     variant={props.todoListFilter === "all" ? "outlined" :"contained"}
-                    onClick={removeTodolist}>x</Button>
+                    onClick={removeTodolist}>x</Button>*/}
             </h3>
             <AddItemForm addItem={addTask}/>
             <ul>
@@ -86,7 +98,7 @@ function Todolist(props: TodoListPropsType) {
                 <Button
                     size={"small"}
                     color={"primary"}
-                    variant={props.todoListFilter === "all" ? "outlined" :"contained"}
+                    variant={props.todoListFilter === "active" ? "outlined" :"contained"}
                     //className={activeBtnClass}
                     onClick={setActiveFilterValue}
                 >Active
@@ -94,7 +106,7 @@ function Todolist(props: TodoListPropsType) {
                 <Button
                     size={"small"}
                     color={"primary"}
-                    variant={props.todoListFilter === "all" ? "outlined" :"contained"}
+                    variant={props.todoListFilter === "completed" ? "outlined" :"contained"}
                     //className={completedBtnClass}
                     onClick={setCompletedFilterValue}
                 >Completed
