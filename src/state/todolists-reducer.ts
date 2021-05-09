@@ -28,21 +28,26 @@ type ChangeTodoListFilterAT = {
 type ActionType = RemoveTodoListAT | AddTodoListAT | ChangeTodoListTitleAT | ChangeTodoListFilterAT
 
 
-export const todoListsReducer = (todoLists: Array<TodoListType>, action: ActionType):Array<TodoListType> => {
+const initialState:Array<TodoListType> =[]
+
+
+
+
+export const todoListsReducer = (state=initialState , action: ActionType):Array<TodoListType> => {
     switch (action.type) {
         case "REMOVE_TODOLIST":
-            return todoLists.filter(t1 => t1.id !== action.todoListID)
+            return state.filter(t1 => t1.id !== action.todoListID)
         case "ADD_TODOLIST":
             const newTodoList: TodoListType = {
                 id:action.id, title: action.title, filter: "all"
             }
-            return [...todoLists, newTodoList]
+            return [...state, newTodoList]
         case "CHANGE_TODOLIST_TITLE":
-            return todoLists.map(tl => tl.id === action.todoListID ? {...tl, title: action.title} : tl)
+            return state.map(tl => tl.id === action.todoListID ? {...tl, title: action.title} : tl)
         case "CHANGE_TODOLIST_FILTER":
-            return todoLists.map(t1 => t1.id === action.todoListID ? {...t1, filter: action.newFilterValue} : t1)
+            return state.map(t1 => t1.id === action.todoListID ? {...t1, filter: action.newFilterValue} : t1)
         default:
-            return todoLists
+            return state
     }
 }
 
@@ -52,5 +57,11 @@ export const RemoveTodolistAC = ( todoListID: string): RemoveTodoListAT => {
 }
 export const AddTodoListAC = (title: string): AddTodoListAT => {
     return { type: "ADD_TODOLIST",  title, id:v1()}
+}
+export const ChangeTodoListTitleAC = (title: string,todoListID: string): ChangeTodoListTitleAT  => {
+    return {type: "CHANGE_TODOLIST_TITLE",title,todoListID}
+}
+export const changeTodoListFilterAC = (newFilterValue:FilterValuesType,todoListID: string):ChangeTodoListFilterAT=>{
+    return {type: "CHANGE_TODOLIST_FILTER",newFilterValue,todoListID}
 }
 
