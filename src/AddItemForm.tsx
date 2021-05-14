@@ -18,6 +18,8 @@ function AddItemForm(props: AddItemFormPropsType) {
         setTitle(e.currentTarget.value)
     }
 
+    console.log('AddItemForm called')
+
     const addItem = () => {
         const trimmedTitle = title.trim()
         if (trimmedTitle) {
@@ -29,6 +31,7 @@ function AddItemForm(props: AddItemFormPropsType) {
     }
 
     const onKeyPressAddItem = (e: KeyboardEvent<HTMLInputElement>) => {
+        error && setError(null)
         if (e.key === "Enter") {
             addItem()
         }
