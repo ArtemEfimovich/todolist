@@ -5,6 +5,7 @@ import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
 import {Button, Checkbox, IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
+import {TodoListType} from "./AppWithRedux";
 
 
 type TodoListPropsType = {
@@ -22,8 +23,8 @@ type TodoListPropsType = {
 }
 
 
-function Todolist(props: TodoListPropsType) {
-    const tasks = props.tasks.map(t => {
+const Todolist=React.memo((props: TodoListPropsType)=> {
+    const tasks = getTaskForTodolist().map(t => {
         const removeTask = () => props.removeTask(t.id, props.id)
 
         const changeStatus = (e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(t.id, e.currentTarget.checked, props.id)
@@ -52,6 +53,9 @@ function Todolist(props: TodoListPropsType) {
         )
     })
 
+
+
+
     const setAllFilterValue = () => props.changeTodoListFilter('all', props.id)
 
     const setActiveFilterValue = () => props.changeTodoListFilter('active', props.id)
@@ -67,6 +71,18 @@ function Todolist(props: TodoListPropsType) {
     const allBtnClass = props.todoListFilter === "all" ? 'active-filter' : ""
     const activeBtnClass = props.todoListFilter === "active" ? 'active-filter' : ""
     const completedBtnClass = props.todoListFilter === "completed" ? 'active-filter' : ""
+
+    function getTaskForTodolist(): Array<TaskType> {
+        switch (props.todoListFilter) {
+            case "active":
+                return props.tasks.filter(t => !t.isDone)
+            case "completed":
+                return props.tasks.filter(t => t.isDone)
+            default:
+                return props.tasks
+        }
+    }
+
 
 
     return (
@@ -114,7 +130,7 @@ function Todolist(props: TodoListPropsType) {
             </div>
         </div>
     )
-}
+})
 
 
 export default Todolist;

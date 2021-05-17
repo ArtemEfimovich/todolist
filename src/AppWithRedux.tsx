@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useCallback, useReducer} from 'react';
 import {v1} from "uuid";
 import {
     AppBar,
@@ -57,42 +57,42 @@ function AppWithRedux() {
     let dispatch = useDispatch()
 
 
-    function removeTask(taskID: string, todoListID: string) {
+    const removeTask = useCallback((taskID: string, todoListID: string) => {
         let action = removeTaskAC(taskID, todoListID)
         dispatch(action)
-    }
+    }, [])
 
-    function addTask(title: string, todoListID: string) {
+    const addTask = useCallback((title: string, todoListID: string) => {
         dispatch(addTaskAC(title, todoListID))
-    }
+    }, [])
 
-    function changeTaskTitle(taskID: string, newTitle: string, todoListID: string) {
+    const changeTaskTitle = useCallback((taskID: string, newTitle: string, todoListID: string) => {
         dispatch(changeTaskTitleAC(taskID, newTitle, todoListID))
-    }
+    }, [])
 
-    function changeTaskStatus(taskID: string, newIsDoneValue: boolean, todoListID: string) {
+    const changeTaskStatus = useCallback((taskID: string, newIsDoneValue: boolean, todoListID: string) => {
         dispatch(changeTaskStatusAC(taskID, newIsDoneValue, todoListID))
-    }
+    }, [])
 
 
-    function changeTodoListFilter(newFilterValue: FilterValuesType, todoListID: string) {
+    const changeTodoListFilter = useCallback((newFilterValue: FilterValuesType, todoListID: string) => {
         dispatch(changeTodoListFilterAC(newFilterValue, todoListID))
-    }
+    }, [])
 
-    function removeTodoList(todoListID: string) {
+    const removeTodoList = useCallback((todoListID: string) => {
         dispatch(RemoveTodolistAC(todoListID))
-    }
+    }, [])
 
-    function addTodoList(title: string) {
+    const addTodoList = useCallback((title: string) => {
         let action = AddTodoListAC(title)
         dispatch(action)
 
 
-    }
+    }, [])
 
-    function changeTodoListTitle(title: string, todoListID: string) {
+    const changeTodoListTitle = useCallback((title: string, todoListID: string) => {
         dispatch(ChangeTodoListTitleAC(title, todoListID))
-    }
+    }, [])
 
 
     function getTaskForTodolist(todoList: TodoListType): Array<TaskType> {
@@ -113,7 +113,7 @@ function AppWithRedux() {
                         <Todolist
                             id={tl.id}
                             title={tl.title}
-                            tasks={getTaskForTodolist(tl)}
+                            tasks={tasks[tl.id]}
                             changeTodoListFilter={changeTodoListFilter}
                             removeTask={removeTask}
                             addTask={addTask}
@@ -121,11 +121,11 @@ function AppWithRedux() {
                             changeTaskStatus={changeTaskStatus}
                             removeTodoList={removeTodoList}
                             changeTaskTitle={changeTaskTitle}
-                            changeTodoListTitle={changeTodoListTitle}
-                        />
-                    </Paper>
-                </Grid>
-            )
+                            changeTodoListTitle ={changeTodoListTitle}
+                    />
+                </Paper>
+        </Grid>
+        )
         }
     )
 
