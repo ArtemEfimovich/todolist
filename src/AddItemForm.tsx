@@ -18,7 +18,6 @@ const AddItemForm = React.memo((props: AddItemFormPropsType)=> {
         setTitle(e.currentTarget.value)
     }
 
-    console.log('AddItemForm called')
 
     const addItem = () => {
         const trimmedTitle = title.trim()
