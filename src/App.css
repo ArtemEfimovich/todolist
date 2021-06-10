@@ -1,20 +1,26 @@
-
-
-.active-filter {
-    background-color: darkslategrey;
-    color: white;
+/*
+.App {
+  padding: 30px;
+  display: flex;
 }
 
+.App > div {
+  margin-right: 50px;
+}
 
 .error {
-    border: red 1px solid;
-    outline: transparent;
+  border: red 1px solid;
 }
 
 .error-message {
-    color: red;
+  color: red;
 }
 
-.not-active{
-    color: rgba(0,0,0,1);
+.active-filter {
+  background-color: aquamarine;
 }
+
+.is-done {
+  opacity: 0.5;
+}
+*/
