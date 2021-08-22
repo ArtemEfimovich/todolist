@@ -15,7 +15,7 @@ import {
 import {
     addTaskAC,
     changeTaskStatusAC,
-    changeTaskTitleAC,
+    changeTaskTitleAC, createTaskTC,
     fetchTasksTC,
     removeTaskAC,
     removeTaskTC
@@ -45,14 +45,13 @@ function App() {
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch();
 
-    const removeTask = useCallback(function (id: string, todolistId: string) {
-        const thunk = removeTaskTC(id, todolistId);
+    const removeTask = useCallback(function ( id: string,todolistId: string) {
+        const thunk = removeTaskTC(id,todolistId);
         dispatch(thunk);
     }, []);
 
-    const addTask = useCallback(function (task:TaskType) {
-        const action = addTaskAC(task);
-        dispatch(action);
+    const addTask = useCallback(function (title: string,todolistId:string) {
+        dispatch(createTaskTC(todolistId,title))
     }, []);
 
     const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
