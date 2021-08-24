@@ -184,7 +184,40 @@ export const createTaskTC = (todolistId: string, taskTitile: string) => (dispatc
 }
 
 
-export const updateTaskStatusTC=(taskId:string, status:TaskStatuses, todolistId:string)=>(dispatch: Dispatch, getState:()=>AppRootStateType)=>{
+
+export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todolistId: string,) => {
+    return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+
+// так как мы обязаны на сервер отправить все св-ва, которые сервер ожидает, а не только
+// те, которые мы хотим обновить, соответственно нам нужно в этом месте взять таску целиком  // чтобы у неё отобрать остальные св-ва
+
+        const allTasksFromState = getState().tasks;
+        const tasksForCurrentTodolist = allTasksFromState[todolistId]
+        const task = tasksForCurrentTodolist.find(t => {
+            return t.id === taskId
+        })
+
+        /*const model ={...task,status}*/
+        if (task) {
+            todolistsAPI.updateTask(todolistId, taskId, {
+                title: task.title,
+                startDate: task.startDate,
+                priority: task.priority,
+                description: task.description,
+                deadline: task.deadline,
+                status: status
+            }).then(() => {
+                const action = changeTaskStatusAC(taskId, status, todolistId)
+                dispatch(action)
+            })
+        }
+    }
+}
+
+
+
+
+/*export const updateTaskStatusTC=(taskId:string, status:TaskStatuses, todolistId:string)=>(dispatch: Dispatch, getState:()=>AppRootStateType)=>{
     let state = getState()
 
     const allTasks = state.tasks
@@ -212,4 +245,4 @@ export const updateTaskStatusTC=(taskId:string, status:TaskStatuses, todolistId:
     }
 
 
-}
+}*/
