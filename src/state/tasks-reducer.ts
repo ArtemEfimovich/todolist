@@ -121,7 +121,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
         case 'ADD-TODOLIST': {
             return {
                 ...state,
-                [action.todolistId]: []
+                [action.todolist.id]: []
             }
         }
         case 'REMOVE-TODOLIST': {
@@ -174,7 +174,6 @@ export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: D
         })
 }
 
-
 export const createTaskTC = (todolistId: string, taskTitile: string) => (dispatch: Dispatch) => {
     todolistsAPI.createTask(todolistId, taskTitile)
         .then(res => {
@@ -183,9 +182,7 @@ export const createTaskTC = (todolistId: string, taskTitile: string) => (dispatc
         })
 }
 
-
-
-export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todolistId: string,) => {
+export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todolistId: string) => {
     return (dispatch: Dispatch, getState: () => AppRootStateType) => {
 
 // так как мы обязаны на сервер отправить все св-ва, которые сервер ожидает, а не только
@@ -209,11 +206,38 @@ export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todolis
             }).then(() => {
                 const action = changeTaskStatusAC(taskId, status, todolistId)
                 dispatch(action)
+
             })
         }
     }
 }
 
+
+
+export const updateTaskTitleTC=(taskId:string, title: string, todolistId: string)=>{
+    return (dispatch:Dispatch,getState: () => AppRootStateType)=>{
+        const allTasksFromState = getState().tasks;
+        const tasksForCurrentTodolist = allTasksFromState[todolistId]
+        const task = tasksForCurrentTodolist.find(t => {
+            return t.id === taskId
+        })
+
+        if (task){
+            todolistsAPI.updateTask(todolistId, taskId, {
+                title: title,
+                startDate: task.startDate,
+                priority: task.priority,
+                description: task.description,
+                deadline: task.deadline,
+                status:task.status
+            }).then(() => {
+                const action = changeTaskTitleAC(taskId,title, todolistId)
+                dispatch(action)
+
+            })
+        }
+    }
+}
 
 
 
