@@ -1,11 +1,11 @@
-import {TasksStateType} from '../App';
+import {TasksStateType} from '../../app/App';
 import {v1} from 'uuid';
 import {AddTodolistActionType, RemoveTodolistActionType, setTodosAc, SetTodosType} from './todolists-reducer';
-import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI} from '../api/todolists-api'
+import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI} from '../../api/todolists-api'
 import {Dispatch} from "redux";
-import {AppRootStateType} from "./store";
-import {setAppErrorAC, setAppStatusAC} from "./app-reducer";
-import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {AppRootStateType} from "../../app/store";
+import {setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {AxiosError} from "axios";
 
 export type RemoveTaskActionType = {

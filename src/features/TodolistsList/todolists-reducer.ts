@@ -1,8 +1,8 @@
-import {todolistsAPI, TodolistType} from '../api/todolists-api'
-import {AppRootStateType} from "./store";
+import {todolistsAPI, TodolistType} from '../../api/todolists-api'
+import {AppRootStateType} from "../../app/store";
 import {Dispatch} from "redux";
-import {RequestStatusType, setAppStatusAC} from "./app-reducer";
-import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {RequestStatusType, setAppStatusAC} from "../../app/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {AxiosError} from "axios";
 
 export type RemoveTodolistActionType = {

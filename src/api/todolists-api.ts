@@ -63,6 +63,26 @@ type GetTasksResponse = {
     items: TaskType[]
 }
 
+
+export type LoginParamsType={
+    email: string
+    password: string
+    rememberMe: boolean
+    captcha?: string
+}
+
+
+
+
+export const authAPI = {
+    login(data: LoginParamsType) {
+        const promise = instance.post<ResponseType<{userId: number}>>('auth/login',data)
+        return promise
+    }
+}
+
+
+
 export const todolistsAPI = {
     getTodolists() {
         const promise = instance.get<TodolistType[]>('todo-lists');
@@ -93,3 +113,6 @@ export const todolistsAPI = {
         return instance.put<ResponseType<{item: TaskType}>>(`todo-lists/${todolistId}/tasks/${taskId}`, model);
     }
 }
+
+
+
