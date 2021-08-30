@@ -2,12 +2,22 @@ import React, {useCallback, useEffect} from 'react'
 import './App.css';
 import {Todolist} from './Todolist';
 import {AddItemForm} from './AddItemForm';
-import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
+import {
+    AppBar,
+    Button,
+    Container,
+    Grid,
+    IconButton,
+    LinearProgress,
+    Paper,
+    Toolbar,
+    Typography
+} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
 import {
     addTodolistTC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC, changeTodolistTitleTC,
+    changeTodolistTitleTC,
     deleteTodoListTC,
     fetchTodosThunk,
     FilterValuesType,
@@ -17,6 +27,8 @@ import {createTaskTC, removeTaskTC, updateTaskStatusTC, updateTaskTitleTC} from 
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './state/store';
 import {TaskStatuses, TaskType} from './api/todolists-api'
+import {RequestStatusType} from "./state/app-reducer";
+import {ErrorSnackbar} from "./app/components/ErrorSnackbar/ErrorSnackbar";
 
 
 export type TasksStateType = {
@@ -27,25 +39,25 @@ export type TasksStateType = {
 function App() {
 
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(fetchTodosThunk)
 
-    },[])
+    }, [])
 
 
-
+    const status = useSelector<AppRootStateType,RequestStatusType>((state) => state.app.status)
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch();
 
-    const removeTask = useCallback(function ( id: string,todolistId: string) {
-        const thunk = removeTaskTC(id,todolistId);
+    const removeTask = useCallback(function (id: string, todolistId: string) {
+        const thunk = removeTaskTC(id, todolistId);
         dispatch(thunk);
     }, []);
 
-    const addTask = useCallback(function (title: string,todolistId:string) {
-        dispatch(createTaskTC(todolistId,title))
+    const addTask = useCallback(function (title: string, todolistId: string) {
+        dispatch(createTaskTC(todolistId, title))
     }, []);
 
     const changeStatus = useCallback(function (taskId: string, status: TaskStatuses, todolistId: string,) {
@@ -57,7 +69,7 @@ function App() {
 
     const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
 
-        dispatch(updateTaskTitleTC(id,newTitle,todolistId))
+        dispatch(updateTaskTitleTC(id, newTitle, todolistId))
         /* const action = changeTaskTitleAC(id, newTitle, todolistId);
         dispatch(action);*/
     }, []);
@@ -76,19 +88,20 @@ function App() {
 
     const changeTodolistTitle = useCallback(function (id: string, title: string) {
 
-     dispatch(changeTodolistTitleTC(id,title))
-      /*  const action = changeTodolistTitleAC(id, title);
-        dispatch(action);*/
+        dispatch(changeTodolistTitleTC(id, title))
+        /*  const action = changeTodolistTitleAC(id, title);
+          dispatch(action);*/
     }, []);
 
     const addTodolist = useCallback((title: string,) => {
-       dispatch(addTodolistTC(title))
+        dispatch(addTodolistTC(title))
         /*const action = addTodolistAC(title);
         dispatch(action);*/
     }, [dispatch]);
 
     return (
         <div className="App">
+            <ErrorSnackbar/>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
@@ -100,6 +113,8 @@ function App() {
                     <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
+
+            {status === 'loading' && <LinearProgress color="secondary"/>}
             <Container fixed>
                 <Grid container style={{padding: "20px"}}>
                     <AddItemForm addItem={addTodolist}/>
@@ -116,6 +131,7 @@ function App() {
                                         title={tl.title}
                                         tasks={allTodolistTasks}
                                         removeTask={removeTask}
+                                        entityStatus={tl.entityStatus}
                                         changeFilter={changeFilter}
                                         addTask={addTask}
                                         changeTaskStatus={changeStatus}
