@@ -14,6 +14,7 @@ import {TaskStatuses, TaskType} from "../../api/todolists-api";
 import {RequestStatusType} from "../../app/app-reducer";
 import {AppRootStateType} from "../../app/store";
 import {createTaskTC, removeTaskTC, updateTaskStatusTC, updateTaskTitleTC} from "./tasks-reducer";
+import {Redirect} from "react-router-dom";
 
 
 
@@ -25,7 +26,12 @@ export type TasksStateType = {
 export const TodolistsList: React.FC = () => {
 
 
+    const isLoggedIn = useSelector<AppRootStateType>((state) =>state.auth.isLoggedIn )
+
     useEffect(() => {
+        if(!isLoggedIn){
+            return
+        }
         dispatch(fetchTodosThunk)
 
     }, [])
@@ -82,6 +88,12 @@ export const TodolistsList: React.FC = () => {
         /*const action = addTodolistAC(title);
         dispatch(action);*/
     }, [dispatch]);
+
+
+
+    if (!isLoggedIn){
+        return <Redirect to ={'/login'}/>
+    }
 
     return (<>
                 <Grid container style={{padding: "20px"}}>

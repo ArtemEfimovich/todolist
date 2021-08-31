@@ -71,13 +71,23 @@ export type LoginParamsType={
     captcha?: string
 }
 
-
+export type AuthMeType={
+    id:number
+    email:string
+    login:string
+}
 
 
 export const authAPI = {
     login(data: LoginParamsType) {
         const promise = instance.post<ResponseType<{userId: number}>>('auth/login',data)
         return promise
+    },
+    me(){
+        return instance.get<ResponseType<AuthMeType>>('auth/me')
+    },
+    logout(){
+        return instance.delete<ResponseType>('auth/login')
     }
 }
 
